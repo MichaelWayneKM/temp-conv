@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temperature Converter Assignment</title>
+    <style>
+      :root {
+        --primary-color: #0f172a; /* Dark */
+        --accent-color: #2563eb; /* Royal Blue */
+        --accent-hover: #1d4ed8; /* Darker Blue */
+        --bg-color: #f1f5f9; /* Light Grey-Blue */
+        --card-bg: #ffffff;
+        --text-main: #334155;
+        --text-muted: #64748b;
+        --border-color: #cbd5e1;
+        --error-bg: #fef2f2;
+        --error-text: #991b1b;
+        --success-bg: #f0f9ff;
+        --success-text: #0c4a6e;
+      }
+
+      body {
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 0;
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* Navigation Header */
+      header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1.5rem 0;
+        text-align: center;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      header p {
+        margin: 0.5rem 0 0;
+        font-size: 0.875rem;
+        color: #94a3b8;
+      }
+
+      /* Main Container */
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+      }
+
+      /* Card Component */
+      .converter-card {
+        background-color: var(--card-bg);
+        width: 100%;
+        max-width: 420px;
+        border-radius: 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+      }
+
+      .card-header {
+        background-color: #f8fafc;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .card-header h2 {
+        margin: 0;
+        font-size: 1.125rem;
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      .card-body {
+        padding: 2rem 1.5rem;
+      }
+
+      /* Inputs and Labels */
+      .input-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--text-main);
+        background-color: #fff;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        box-sizing: border-box;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+
+      input[type="text"]:focus,
+      select:focus {
+        border-color: var(--accent-color);
+        outline: 0;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      /* Primary Button */
+      .btn-convert {
+        display: block;
+        width: 100%;
+        padding: 0.875rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #ffffff;
+        background-color: var(--accent-color);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .btn-convert:hover {
+        background-color: var(--accent-hover);
+      }
+
+      .btn-convert:active {
+        transform: translateY(1px);
+      }
+
+      /* Result Display */
+      .output-container {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background-color: #f8fafc;
+        border: 1px dashed var(--border-color);
+        border-radius: 6px;
+        text-align: center;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .result-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      .placeholder-text {
+        color: var(--text-muted);
+        font-style: italic;
+        font-size: 0.875rem;
+      }
+
+      /* Status Messages */
+      .error-msg {
+        background-color: var(--error-bg);
+        color: var(--error-text);
+        padding: 0.75rem;
+        border-radius: 6px;
+        border: 1px solid #fecaca;
+        font-size: 0.875rem;
+        width: 100%;
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 1.5rem;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        border-top: 1px solid var(--border-color);
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Temperature Converter Assignment</h1>
+      <p>Conversion Utility</p>
+    </header>
+
+    <main>
+      <section class="converter-card">
+        <div class="card-header">
+          <h2>Conversion Interface</h2>
+        </div>
+        <div class="card-body">
+          <div class="input-group">
+            <label for="tempInput">Temperature Value</label>
+            <input
+              type="text"
+              id="tempInput"
+              placeholder="Enter number (e.g., 36)"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="unitSelect">Conversion Mode</label>
+            <select id="unitSelect">
+              <option value="celsius">Celsius to Fahrenheit</option>
+              <option value="fahrenheit">Fahrenheit to Celsius</option>
+            </select>
+          </div>
+
+          <button id="convertBtn" class="btn-convert">
+            Calculate Conversion
+          </button>
+
+          <div id="outputArea" class="output-container">
+            <span class="placeholder-text"
+              >Enter a value above to see the result</span
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      &copy; 2024 Developed by Edwin Abuyeka. All Rights Reserved.
+    </footer>
+
+    <script>
+      /**
+       * Temperature Conversion Logic
+       * Handles user input processing and mathematical calculations.
+       */
+
+      // Standard conversion formulas
+      function toFahrenheit(celsius) {
+        return (celsius * 9) / 5 + 32;
+      }
+
+      function toCelsius(fahrenheit) {
+        return ((fahrenheit - 32) * 5) / 9;
+      }
+
+      // Event handler for the conversion process
+      function processConversion() {
+        // DOM Element References
+        const inputEl = document.getElementById("tempInput");
+        const selectEl = document.getElementById("unitSelect");
+        const outputEl = document.getElementById("outputArea");
+
+        const rawValue = inputEl.value;
+
+        // Validate that input is not empty
+        if (rawValue.trim() === "") {
+          outputEl.innerHTML =
+            '<div class="error-msg">Please enter a temperature value to continue.</div>';
+          return;
+        }
+
+        const numValue = parseFloat(rawValue);
+
+        // Validate that input is a valid number
+        if (isNaN(numValue)) {
+          outputEl.innerHTML =
+            '<div class="error-msg">Invalid input. Please enter a numeric value.</div>';
+          return;
+        }
+
+        // Determine calculation path based on user selection
+        const mode = selectEl.value;
+        let result = 0;
+        let unit = "";
+
+        if (mode === "celsius") {
+          result = toFahrenheit(numValue);
+          unit = "°F";
+        } else {
+          result = toCelsius(numValue);
+          unit = "°C";
+        }
+
+        // Render result to the UI
+        outputEl.innerHTML =
+          '<span class="result-value">' +
+          result.toFixed(2) +
+          " " +
+          unit +
+          "</span>";
+      }
+
+      // Initialize event listeners when document model is ready
+      document.addEventListener("DOMContentLoaded", function () {
+        const btn = document.getElementById("convertBtn");
+        btn.addEventListener("click", processConversion);
+      });
+    </script>
+  </body>
+</html>
